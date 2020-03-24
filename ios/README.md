@@ -46,63 +46,65 @@ npm i --save react-native-file-share-intent
 #import <UIKit/UIKit.h>
 #import <Social/Social.h>
 
-@interface ShareViewController :  UIViewController
+@interface LabStarShare :  UIViewController
 
 @end
 ```
 
 - Copy the below code and paste into the `ShareViewController.m`
 ```objective-c
-#import "ShareViewController.h"
-#import "RCTRootView.h"
-#import "RCTBundleURLProvider.h"
+#import "LabStarShare.h"
 #import "RNFileShareIntent.h"
+#import <React/RCTBundleURLProvider.h>
+#import <React/RCTRootView.h>
 
-@interface ShareViewController ()
+@interface LabStarShare ()
 
 @end
 
-@implementation ShareViewController
+@implementation LabStarShare
 
 - (void) loadView
 {
-NSURL *jsCodeLocation;
+  NSURL *jsCodeLocation;
 
-NSExtensionItem *item = self.extensionContext.inputItems.firstObject;
-NSItemProvider *itemProvider = item.attachments.firstObject;
-[RNFileShareIntent setShareFileIntentModule_itemProvider:itemProvider];
-[RNFileShareIntent setContext: self.extensionContext];
-
-
-#if DEBUG
-jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"Share" fallbackResource:nil];
-#else
-jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/share.bundle?platform=ios&dev=true"]; 
-// Change localhost to your network Ip for your Device Debugging
-#endif
+  NSExtensionItem *item = self.extensionContext.inputItems.firstObject;
+  NSItemProvider *itemProvider = item.attachments.firstObject;
+  [RNFileShareIntent setShareFileIntentModule_itemProvider:itemProvider];
+  [RNFileShareIntent setContext: self.extensionContext];
 
 
-RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-moduleName:@"Share"
-initialProperties:nil
-launchOptions:nil];
-self.view = rootView;
+  #if DEBUG
+    jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"Share" fallbackResource:nil];
+  #else
+    jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"Share" withExtension:@"jsbundle"];
+  #endif
+
+
+//   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"Share" fallbackResource:nil];
+
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+  moduleName:@"LabStarShare"
+  initialProperties:nil
+  launchOptions:nil];
+  self.view = rootView;
 }
 
 // animate (IN)
-- (void)viewWillAppear:(BOOL)animated
-{
-[super viewWillAppear:animated];
+// - (void)viewWillAppear:(BOOL)animated
+// {
+//   [super viewWillAppear:animated];
 
-self.view.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
-[UIView animateWithDuration:0.25 animations:^
-{
-self.view.transform = CGAffineTransformIdentity;
-}];
-}
+//   self.view.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
+//   [UIView animateWithDuration:0.25 animations:^
+//   {
+//   self.view.transform = CGAffineTransformIdentity;
+//   }];
+// }
 
 
 @end
+
 
 ```
 
